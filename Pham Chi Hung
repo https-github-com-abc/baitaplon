@@ -1,0 +1,187 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+struct Coffee{
+	int Ban;
+	char Mon[100];
+	int SoLuong;
+	int Gia;
+};
+typedef Coffee COFFEE;
+void Nhap(COFFEE &a){
+	printf("Nhap ban so :");
+	scanf("%d",&a.Ban);
+	fflush(stdin);
+	printf("Nhap mon :");
+	gets(a.Mon);
+	fflush(stdin);
+	printf("Nhap so luong :");
+	scanf("%d",&a.SoLuong);
+	printf("Gia :");
+	scanf("%d",&a.Gia);	
+}
+void NhapDSBan(COFFEE *&a,int &n)
+{
+	if(n == 0)
+	{
+		a = (COFFEE*)malloc(sizeof(COFFEE));
+	}
+	else
+	{
+		realloc(a,(n+1)*sizeof(COFFEE));
+	}
+	Nhap(a[n]);
+	n++;
+}
+void In(int n)
+{
+	printf("\n");
+	for(int i=1; i<=n; i++)
+	{
+		printf("=");
+	}
+}
+void Xuat(COFFEE a)
+{
+	printf("\n%7d",a.Ban);
+	printf("||%-20s",a.Mon);
+	printf("||%-18d",a.SoLuong);
+	printf("||%d",a.Gia);
+}
+void XuatDSBan(COFFEE *a,int n)
+{
+	In(100);
+	printf("\n%s||%-20s%-20s%s","STT BAN","Loai Thuc Uong","So Luong","Don Gia");
+	for(int i=0;i<n;i++)
+	{
+		Xuat(a[i]);
+	}
+}
+void SapXep(COFFEE *a, int n)//sap xep truoc khi dung thuat toan de thong ke
+{
+	for(int i = 0; i< n-1; i++)
+	{
+		for(int j = i+1; j < n; j++)
+		{
+			if(strcmp(a[i].Mon,a[j].Mon)>0)
+			{
+			   COFFEE tam = a[i];
+			   a[i] = a[j];
+			   a[j] = tam;
+			}
+		}
+	}
+}
+void ThongKe(COFFEE *a,int n)
+{
+	SapXep(a,n);
+	int vt = 0;//vi tri bat dau dem;
+	for(int i = vt; i<n; i = vt)
+	{
+		int dem = 1;
+		int T = a[i].SoLuong;
+		for(int j = vt + 1; j < n; j++)
+		{
+			if(strcmp(a[i].Mon, a[j].Mon)==0)
+			{
+				dem++;
+				T = T + a[j].SoLuong;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(dem>0)
+		{
+			printf("\nLoai do uong %s co so luong order la %d",a[vt].Mon,T);
+			vt = vt + dem; //vi tri bat dau moi;
+		}
+	}
+}
+void Xep(COFFEE *a, int n)//sap xep truoc khi dung thuat toan de thong ke
+{
+	for(int i = 0; i< n-1; i++)
+	{
+		for(int j = i+1; j < n; j++)
+		{
+			if(a[i].Ban > a[j].Ban)
+			{
+			   COFFEE tam = a[i];
+			   a[i] = a[j];
+			   a[j] = tam;
+			}
+		}
+	}
+}
+void TinhTien(COFFEE *a,int n)
+{
+	Xep(a,n);
+	int vt = 0;//vi tri bat dau dem;
+	for(int i = vt; i<n; i = vt)
+	{
+		int dem = 1;
+		int T = a[i].SoLuong*a[i].Gia;
+		for(int j = vt + 1; j < n; j++)
+		{
+			if(a[i].Ban == a[j].Ban)
+			{
+				dem++;
+				T = T + a[j].SoLuong*a[j].Gia;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(dem>0)
+		{
+			printf("\nTien cua ban so %d la %d",a[vt].Ban,T);
+			vt = vt + dem; //vi tri bat dau moi;
+		}
+	}
+}
+void Menu(){
+	COFFEE *a;
+	int chon, flat=1, n=0;
+	while(flat){
+		system("cls");//xoa man hinh
+		printf("1. Nhap danh sach ban .\n");
+		printf("2. Xuat danh sach ban .\n");
+		printf("3. Thong ke ban .\n");
+		printf("4. Tinh tien theo ban\n");
+		printf("5. Thoat .\n");	
+		printf("Moi ban chon chuc nang: ");
+		scanf("%d",&chon);
+		switch(chon)
+		{
+			case 1:
+				NhapDSBan(a,n);
+				break;
+			case 2:
+				printf("Thong tin ban da nhap vao la: \n");
+				XuatDSBan(a,n);
+				system("pause");//dung man hinh
+				break;
+			case 3:
+				ThongKe(a,n);
+				system("pause");
+				break;
+			case 4:
+			    TinhTien(a,n);
+				system("pause");
+				break;
+			case 5:
+				flat=0;
+				break;		
+			default:
+			    printf("\nLua chon cua ban khong hop le !");
+				system("pause");	
+		}
+	}					
+}
+int main()
+{
+	Menu();
+}
+
